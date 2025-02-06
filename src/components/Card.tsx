@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { getPokemon, getPokemonList } from '../api/pokemonApi.ts'
+import { getPokemon  } from '../api/pokemonApi.ts'
 import styled from 'styled-components'
+import Loading from './Loading.tsx'
 
 const Card = () => {
   const [krPokemon, setKrPokemon] = useState([])
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async  () => {
       try {
         const koreaResponsePokemon = await getPokemon();
+        setLoading(false);
         setKrPokemon(koreaResponsePokemon)
-      setLoading(false);
       } catch (e) {
         setError('데이터를 불러오는 중 오류가 발생했습니다!');
       }
@@ -20,7 +21,7 @@ const Card = () => {
     fetchData();
   }, [])
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return  <Loading loading={loading} />
   if (error) return <p>{error}</p>;
 
   return (
@@ -56,7 +57,7 @@ const Title = styled.h2`
     font-weight: bold;
     text-align: center;
     color: #ffcc00;
-    text-shadow: 2px 2px 0px #000, 4px 4px 0px #ff0000;
+    text-shadow: 2px 2px  #000, 4px 4px  #ff0000;
 `
 
 const Ul = styled.ul`
