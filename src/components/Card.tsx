@@ -29,9 +29,15 @@ const Card = () => {
     fetchData();
   }, []);
 
+  const toggleModal = () => {
+    setModalProps((prev) => ({
+      ...prev,
+      check: !prev.check,
+    }));
+  };
+
   if (loading) return <Loading loading={loading} />;
   if (error) return <p>{error}</p>;
-
   return (
     <Wrapper>
       <Title>포켓몬 도감</Title>
@@ -40,11 +46,8 @@ const Card = () => {
           <ListItem
             key={index}
             onClick={() => {
-              setModalProps((prev) => ({
-                ...prev,
-                id: index,
-                check: !prev.check,
-              }));
+              toggleModal();
+              setModalProps((prev) => ({ ...prev, id: index }));
             }}
           >
             <div>
@@ -57,7 +60,13 @@ const Card = () => {
           </ListItem>
         ))}
       </Ul>
-      {modalProps.check && <Modal id={modalProps.id} />}
+      {modalProps.check && (
+        <Modal
+          id={modalProps.id}
+          onClick={toggleModal}
+          check={modalProps.check}
+        />
+      )}
     </Wrapper>
   );
 };
