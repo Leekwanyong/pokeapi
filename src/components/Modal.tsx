@@ -45,7 +45,7 @@ const Modal = ({ id, check, onClick }: Props) => {
   return ReactDOM.createPortal(
     <>
       {check && (
-        <Wrapper onClick={() => onClick((prev) => !check)}>
+        <Wrapper onClick={() => onClick()}>
           <Ul>
             {findFlavorTextData.map((item, index) => (
               <li key={index}>
