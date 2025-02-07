@@ -3,11 +3,7 @@ import { getPokemon } from '../api/pokemonApi.ts';
 import styled from 'styled-components';
 import Loading from './Loading.tsx';
 import Modal from './Modal.tsx';
-
-interface Props {
-  id: number;
-  check: boolean;
-}
+import { Props } from '../types/Card/cardType';
 
 const Card = () => {
   const [krPokemon, setKrPokemon] = useState([]);

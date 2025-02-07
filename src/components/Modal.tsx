@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Props } from '../types/Card/cardType';
+import { ModalData } from '../types/Modal/modalType';
 import {
   FlavorTextData,
   GenusType,
   getFlavorTextData,
   getGenusTypeData,
 } from '../api/pokemonApi.ts';
-import styled from 'styled-components';
-
-interface ModalData {
-  flavorText: FlavorTextData[];
-  genus: GenusType[];
-}
-
-interface Props {
-  id: number;
-  check: boolean;
-  onClick: () => void;
-}
 
 const Modal = ({ id, check, onClick }: Props) => {
   const [modalData, setModalData] = useState<ModalData[]>([]);
