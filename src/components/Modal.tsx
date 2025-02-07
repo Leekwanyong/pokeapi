@@ -77,7 +77,7 @@ export default Modal;
 
 // height 범위 떄문에 범위를 넘어가서 클릭하면은 안 닫힘
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
@@ -86,7 +86,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: fixed;
 `;
 
 const Ul = styled.ul`
