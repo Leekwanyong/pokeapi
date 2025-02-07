@@ -15,11 +15,12 @@ interface ModalData {
 
 interface Props {
   id: number;
+  check: boolean;
+  onClick: () => void;
 }
 
-const Modal = ({ id }: Props) => {
+const Modal = ({ id, check, onClick }: Props) => {
   const [modalData, setModalData] = useState<ModalData[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,41 +41,60 @@ const Modal = ({ id }: Props) => {
   const findGenusData = modalData.map((item) =>
     item.genus.find((v) => v.id === id),
   );
-
+  console.log(check, onClick);
   return ReactDOM.createPortal(
-    <div>
-      <Ul>
-        {findFlavorTextData.map((item, index) => (
-          <li key={index}>
-            <div>
-              <ImgContainer>
-                <p>No.{id + 1}</p>
-                <Img
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id + 1}.png`}
-                  alt={item.name}
-                />
-              </ImgContainer>
-              <p>{item.flavor_text}</p>
-              {findGenusData.map((v) => (
-                <p key={index}>{v.genus}</p>
-              ))}
-            </div>
-          </li>
-        ))}
-      </Ul>
-    </div>,
+    <>
+      {check && (
+        <Wrapper onClick={() => onClick((prev) => !check)}>
+          <Ul>
+            {findFlavorTextData.map((item, index) => (
+              <li key={index}>
+                <div>
+                  <ImgContainer>
+                    <p>No.{id + 1}</p>
+                    <Img
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id + 1}.png`}
+                      alt={item.name}
+                    />
+                  </ImgContainer>
+                  <p>{item.flavor_text}</p>
+                  {findGenusData.map((v) => (
+                    <p key={index}>{v.genus}</p>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </Ul>
+        </Wrapper>
+      )}
+    </>,
+
     document.body,
   );
 };
 
 export default Modal;
 
+const Wrapper = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Ul = styled.ul`
+  position: fixed;
   list-style: none;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 400px;
   border-radius: 8px;
   margin: 0;
   padding: 0;
