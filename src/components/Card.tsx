@@ -1,29 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getPokemon } from '../api/pokemonApi.ts';
 import styled from 'styled-components';
-import Loading from './Loading.tsx';
 import Modal from './Modal.tsx';
 import { Props } from '../types/Card/cardType';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import Loading from './Loading.tsx';
 
 const Card = () => {
-  const [krPokemon, setKrPokemon] = useState([]);
   const [modalProps, setModalProps] = useState<Props>({ id: 0, check: false });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+    useInfiniteQuery({
+      queryKey: ['pokemon-species'],
+      queryFn: ({ pageParam = 0 }) => getPokemon(pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => {
+        return lastPage?.nextPage ?? undefined;
+      },
+    });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const koreaResponsePokemon = await getPokemon();
-        setLoading(false);
-        setKrPokemon(koreaResponsePokemon);
-      } catch (e) {
-        setError('데이터를 불러오는 중 오류가 발생했습니다!');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
       }
     };
-
-    fetchData();
-  }, []);
+  }, [fetchNextPage, hasNextPage]);
 
   const toggleModal = () => {
     setModalProps((prev) => ({
@@ -32,30 +47,36 @@ const Card = () => {
     }));
   };
 
-  if (loading) return <Loading loading={loading} />;
-  if (error) return <p>{error}</p>;
+  if (isLoading) return <Loading loading={isLoading} />;
+  if (isError) return <p>{isError}</p>;
   return (
     <Wrapper>
       <Title>포켓몬 도감</Title>
       <Ul>
-        {krPokemon.map((item, index) => (
-          <ListItem
-            key={index}
-            onClick={() => {
-              toggleModal();
-              setModalProps((prev) => ({ ...prev, id: index }));
-            }}
-          >
-            <div>
-              <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`}
-                alt={item.name}
-              />
-            </div>
-            {item.name}
-          </ListItem>
-        ))}
+        {data?.pages.map((item, pageIndex) =>
+          item.items.map((v, index) => (
+            <ListItem
+              key={index}
+              onClick={() => {
+                toggleModal();
+                setModalProps((prev) => ({ ...prev, id: index }));
+              }}
+            >
+              <div>
+                <img
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pageIndex * 30 + index + 1}.png`}
+                  alt={v.name}
+                />
+              </div>
+              {v.name}
+            </ListItem>
+          )),
+        )}
       </Ul>
+      <div
+        ref={observerRef}
+        style={{ height: '100px', background: 'red' }}
+      ></div>
       {modalProps.check && (
         <Modal
           id={modalProps.id}
