@@ -12,18 +12,29 @@ export const getPokemonList = async () => {
   return response.data.results;
 };
 
-export const getPokemon = async (): Promise<KoreaPokemonNameType[]> => {
+export const getPokemon = async (
+  offset = 0,
+): Promise<{ items: KoreaPokemonNameType[]; nextPage?: number }> => {
+  const limit = 30;
+  const maxCount = 150;
+
   const speciesResponse = await axios.get(
-    `https://pokeapi.co/api/v2/pokemon-species?limit=150`,
+    `https://pokeapi.co/api/v2/pokemon-species?limit=${limit}&offset=${offset}`,
   );
   const speciesFilter = await Promise.all(
     speciesResponse.data.results.map((item) => axios.get(item.url)),
   );
+
   const koreaPokemonName = speciesFilter.map((item) =>
     item.data.names.find((item) => item.language.name === 'ko'),
   );
+  const nextOffset = offset + limit;
+  const hasMoreData = nextOffset < maxCount;
 
-  return koreaPokemonName;
+  return {
+    items: koreaPokemonName,
+    nextPage: hasMoreData ? nextOffset : undefined,
+  };
 };
 
 export const getFlavorTextData = async (): Promise<FlavorTextData[]> => {
