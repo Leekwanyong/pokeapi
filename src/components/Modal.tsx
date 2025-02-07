@@ -52,16 +52,16 @@ const Modal = ({ id, check, onClick }: Props) => {
             {findFlavorTextData.map((item, index) => (
               <li key={index}>
                 <div>
+                  <p>No.{id + 1}</p>
                   <ImgContainer>
-                    <p>No.{id + 1}</p>
                     <Img
                       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id + 1}.png`}
                       alt={item.name}
                     />
                   </ImgContainer>
-                  <p>{item.flavor_text}</p>
+                  <FlavorText>{item.flavor_text}</FlavorText>
                   {findGenusData.map((v) => (
-                    <p key={index}>{v.genus}</p>
+                    <GenusData key={index}>{v.genus}</GenusData>
                   ))}
                 </div>
               </li>
@@ -82,32 +82,56 @@ const Wrapper = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
+  background: #ffffffb7;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: 'Press Start 2P', cursive;
 `;
 
 const Ul = styled.ul`
   list-style: none;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 400px;
-  border-radius: 8px;
   margin: 0;
-  padding: 0;
-  background-color: #5ac2ef;
+  padding: 1rem;
+  width: 350px;
+  height: 450px;
+  background: #fff8dc;
+  border: 4px solid #333;
+  border-radius: 12px;
+  box-shadow: 8px 8px 0px 0px #888888;
+  box-sizing: border-box;
+  overflow: hidden;
 `;
 
 const ImgContainer = styled.div`
   image-rendering: pixelated;
-  border: 1px solid black;
-  background-color: #ffff;
-  border-radius: 8px 8px 0 0;
+  background: linear-gradient(45deg, #fefcea, #f1da36);
+  border: 4px solid black;
+  margin-top: 12px;
+  margin-bottom: 12px;
 `;
 
 const Img = styled.img`
   width: 60%;
+  position: relative;
+  animation: moveLeft 3s linear infinite;
+
+  @keyframes moveLeft {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-20%);
+    }
+  }
+`;
+
+const FlavorText = styled.p`
+  margin-bottom: 12px;
+  font-size: 18px;
+`;
+
+const GenusData = styled.p`
+  font-size: 18px;
 `;
