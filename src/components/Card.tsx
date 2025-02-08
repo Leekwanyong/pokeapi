@@ -75,10 +75,7 @@ const Card = () => {
           )),
         )}
       </Ul>
-      <div
-        ref={observerRef}
-        style={{ height: '100px', background: 'red' }}
-      ></div>
+      <div ref={observerRef} style={{ height: '100px' }}></div>
       {modalProps.check && (
         <Modal
           id={modalProps.id}
