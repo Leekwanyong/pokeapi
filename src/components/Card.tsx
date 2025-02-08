@@ -63,9 +63,6 @@ const Card = () => {
   if (isLoading) return <Loading loading={isLoading} />;
   if (isError) return <p>{isError}</p>;
 
-  // 고유한 키를 주지 않으면 같은 데이터를 중복 렌더링 한다.
-  // data?.pages.flatMap 와 data?.pages.map 에 차이점은 두 번쨰는 중첩 배열을
-  // 첫 번쨰는 배열 안에 객체로 반환한다.
   return (
     <Wrapper>
       <Title>포켓몬 도감</Title>
@@ -123,4 +120,13 @@ const Ul = styled.ul`
   align-items: center;
   box-sizing: border-box;
   justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  @media (max-width: 480px) {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+  }
 `;
