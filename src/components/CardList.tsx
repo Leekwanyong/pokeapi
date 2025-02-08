@@ -32,6 +32,11 @@ const CardListComponent = ({
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${imgKeyId}.png`}
             alt={item.name}
+            style={{
+              width: '100%',
+              height: '100%',
+              imageRendering: 'pixelated',
+            }}
           />
         </div>
         <p>{item.name}</p>
