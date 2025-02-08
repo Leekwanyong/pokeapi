@@ -57,6 +57,9 @@ const ListItem = styled.li`
   padding: 15px;
   transition: transform 0.2s;
   cursor: pointer;
+  @media (max-width: 480px) {
+    width: 300px;
+  }
 
   &:hover {
     transform: scale(1.05);
