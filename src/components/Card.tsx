@@ -1,11 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { getPokemon } from '../api/pokemonApi.ts';
 import styled from 'styled-components';
-import Modal from './Modal.tsx';
 import { Props } from '../types/Card/cardType';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Loading from './Loading.tsx';
 import CardList from './CardList.tsx';
+
+const Modal = lazy(() => import('./Modal.tsx'));
 
 const Card = () => {
   const [modalProps, setModalProps] = useState<Props>({ id: 0, check: false });
@@ -77,11 +85,13 @@ const Card = () => {
       </Ul>
       <div ref={observerRef} style={{ height: '100px' }}></div>
       {modalProps.check && (
-        <Modal
-          id={modalProps.id}
-          onClick={handleOntoggleModal}
-          check={modalProps.check}
-        />
+        <Suspense fallback={<Loading loading={isLoading} />}>
+          <Modal
+            id={modalProps.id}
+            onClick={handleOntoggleModal}
+            check={modalProps.check}
+          />
+        </Suspense>
       )}
     </Wrapper>
   );
