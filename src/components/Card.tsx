@@ -5,6 +5,7 @@ import Modal from './Modal.tsx';
 import { Props } from '../types/Card/cardType';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Loading from './Loading.tsx';
+import CardList from './CardList.tsx';
 
 const Card = () => {
   const [modalProps, setModalProps] = useState<Props>({ id: 0, check: false });
@@ -40,36 +41,37 @@ const Card = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  const toggleModal = () => {
+  const handleOntoggleModal = () => {
     setModalProps((prev) => ({
       ...prev,
       check: !prev.check,
     }));
   };
 
+  const handleOnModalProps = (key) => {
+    setModalProps((prev) => ({ ...prev, id: key - 1 }));
+  };
+
   if (isLoading) return <Loading loading={isLoading} />;
   if (isError) return <p>{isError}</p>;
+
+  // 고유한 키를 주지 않으면 같은 데이터를 중복 렌더링 한다.
+  // data?.pages.flatMap 와 data?.pages.map 에 차이점은 두 번쨰는 중첩 배열을
+  // 첫 번쨰는 배열 안에 객체로 반환한다.
   return (
     <Wrapper>
       <Title>포켓몬 도감</Title>
       <Ul>
-        {data?.pages.map((item, pageIndex) =>
-          item.items.map((v, index) => (
-            <ListItem
-              key={index}
-              onClick={() => {
-                toggleModal();
-                setModalProps((prev) => ({ ...prev, id: index }));
-              }}
-            >
-              <div>
-                <img
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pageIndex * 30 + index + 1}.png`}
-                  alt={v.name}
-                />
-              </div>
-              {v.name}
-            </ListItem>
+        {data?.pages.flatMap((page, pageIndex) =>
+          page.items.map((pokemon, index) => (
+            <CardList
+              item={pokemon}
+              key={`${pokemon.name}-${pageIndex}`}
+              index={index}
+              page={pageIndex}
+              onClick={handleOntoggleModal}
+              modalOnKey={handleOnModalProps}
+            />
           )),
         )}
       </Ul>
@@ -80,7 +82,7 @@ const Card = () => {
       {modalProps.check && (
         <Modal
           id={modalProps.id}
-          onClick={toggleModal}
+          onClick={handleOntoggleModal}
           check={modalProps.check}
         />
       )}
@@ -114,18 +116,4 @@ const Ul = styled.ul`
   align-items: center;
   box-sizing: border-box;
   justify-content: space-between;
-`;
-
-const ListItem = styled.li`
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  padding: 15px;
-  transition: transform 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
