@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { getPokemon } from '../api/pokemonApi.ts';
 import styled from 'styled-components';
 import Modal from './Modal.tsx';
@@ -41,16 +41,16 @@ const Card = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  const handleOntoggleModal = () => {
+  const handleOntoggleModal = useCallback(() => {
     setModalProps((prev) => ({
       ...prev,
       check: !prev.check,
     }));
-  };
+  }, []);
 
-  const handleOnModalProps = (key) => {
+  const handleOnModalProps = useCallback((key) => {
     setModalProps((prev) => ({ ...prev, id: key - 1 }));
-  };
+  }, []);
 
   if (isLoading) return <Loading loading={isLoading} />;
   if (isError) return <p>{isError}</p>;
