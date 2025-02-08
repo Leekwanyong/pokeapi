@@ -7,10 +7,11 @@
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.15",
     "uuid": "^11.0.5"
+=======
+    "react-scripts": 5.0.1"aste
   },
   "scripts": {
     "start": "react-scripts start",
