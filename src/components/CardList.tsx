@@ -11,7 +11,13 @@ interface Props {
   modalOnKey: (id: number) => void;
 }
 
-const CardList = ({ item, page, index, onClick, modalOnKey }: Props) => {
+const CardListComponent = ({
+  item,
+  page,
+  index,
+  onClick,
+  modalOnKey,
+}: Props) => {
   const imgKeyId = page * 30 + index + 1;
 
   return (
@@ -33,6 +39,8 @@ const CardList = ({ item, page, index, onClick, modalOnKey }: Props) => {
     </>
   );
 };
+const CardList: React.MemoExoticComponent<React.FC<Props>> =
+  React.memo(CardListComponent);
 
 export default CardList;
 
