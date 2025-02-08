@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  FlavorTextData,
   GenusType,
   KoreaPokemonNameType,
 } from '../types/PoketApi/pokemonApiType.ts';
