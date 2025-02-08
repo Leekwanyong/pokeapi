@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.66.0",
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "styled-components": "^6.1.15",
+    "uuid": "^11.0.5"
+=======
+    "react-scripts": 5.0.1"aste
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,10 +38,14 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.19.0",
     "@types/styled-components": "^5.1.34",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "prettier": "^3.4.2"
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript-eslint": "^8.23.0"
   }
 }

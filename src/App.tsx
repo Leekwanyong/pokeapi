@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
+import Card from './components/Card.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Card />
+    </QueryClientProvider>
   );
 }
 
